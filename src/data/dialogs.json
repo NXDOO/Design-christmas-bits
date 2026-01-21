@@ -1,0 +1,47 @@
+{
+  "aa": {
+    "pages": [
+      {
+        "speaker": "Alice",
+        "avatarUrl": "",
+        "lines": [
+          "Hello, Tom. The Christmas party is about to start.",
+          "I'm really busy. Can you help me out?"
+        ]
+      },
+      {
+        "speaker": "Tom",
+        "avatarUrl": "",
+        "lines": [
+          "Of course! What can I help you with?"
+        ]
+      },
+      {
+        "speaker": "Alice",
+        "avatarUrl": "",
+        "lines": [
+          "I need to put the new decorations Roki bought in the venue. Can you find Roki and help place them in the right spots?",
+          "Also, I can't find Bob the photographer. Can you find him and ask him to go to the party venue to take photos?",
+          "One more thing, we're short on drinks at the party. Ask Samuel if he can make some more."
+        ]
+      },
+      {
+        "speaker": "Tom",
+        "avatarUrl": "",
+        "lines": [
+          "Sure, I'll help you."
+        ]
+      }
+    ]
+  },
+  "talker": {
+    "pages": [
+      { "speaker": "Resident", "avatarUrl": "", "lines": ["The weather is nice today.", "You look busy."] }
+    ]
+  },
+  "npc5": {
+    "pages": [
+      { "speaker": "NPC5", "avatarUrl": "", "lines": ["You are finally here! It is your turn for White Elephant. Pick a gift!"] }
+    ]
+  }
+}

@@ -1,0 +1,124 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Office_Floors_TILESET_A2_.tsx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "/Users/naixuandu/Documents/8bit game/public/party_map.json.tmx": {
+            "scale": 1.1,
+            "selectedLayer": 9,
+            "viewCenter": {
+                "x": 401.8181818181818,
+                "y": 214.09090909090907
+            }
+        },
+        "/Users/naixuandu/Documents/8bit game/public/party_map.json.tmx#Interiors_32x32": {
+            "scaleInDock": 1
+        },
+        "/Users/naixuandu/Documents/8bit game/public/party_map.json.tmx#party room": {
+            "scaleInDock": 0.84
+        },
+        "Interiors_32x32.tsx": {
+            "scaleInDock": 0.9294,
+            "scaleInEditor": 1
+        },
+        "Modern_Office_32x32.tsx": {
+            "scaleInDock": 1.0131,
+            "scaleInEditor": 1
+        },
+        "Office_Floors_TILESET_A2_.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Office_walls_floors_32x32.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Room_Builder_Office1_32x32.tsx": {
+            "scaleInDock": 1.2473,
+            "scaleInEditor": 1
+        },
+        "Room_Builder_Office_32x32.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "party_map.tmx": {
+            "scale": 0.6766,
+            "selectedLayer": 9,
+            "viewCenter": {
+                "x": 1215.637008572273,
+                "y": 311.11439550694655
+            }
+        },
+        "party_map.tmx#Interiors_32x32": {
+            "scaleInDock": 1
+        },
+        "party_map.tmx#party room": {
+            "scaleInDock": 1
+        },
+        "studio 8 map.tmx": {
+            "scale": 1.0072,
+            "selectedLayer": 15,
+            "viewCenter": {
+                "x": 1303.1175536139792,
+                "y": 1400.4169976171565
+            }
+        },
+        "studio 8 map.tmx#Interiors_32x32": {
+            "scaleInDock": 1
+        },
+        "studio 8 map.tmx#Modern_Office_32x32": {
+            "scaleInDock": 1
+        },
+        "studio 8 map.tmx#Office_Floors_TILESET_A2_": {
+            "scaleInDock": 1
+        },
+        "studio 8 map.tmx#Office_walls_floors_32x32": {
+            "scaleInDock": 2.079
+        },
+        "studio 8 map.tmx#Room_Builder_Office1_32x32.tsx": {
+            "scaleInDock": 0.5834
+        },
+        "studio 8 map.tmx#Room_Builder_Office_32x32": {
+            "scaleInDock": 1.1029
+        },
+        "studio 8 map.tmx#map_2": {
+            "scaleInDock": 1
+        }
+    },
+    "last.exportedFilePath": "/Users/naixuandu/Documents/8bit game/public",
+    "last.imagePath": "/Users/naixuandu/Documents/8bit game/public",
+    "map.height": 30,
+    "map.lastUsedExportFilter": "All Files (*)",
+    "map.lastUsedFormat": "tmx",
+    "map.width": 30,
+    "openFiles": [
+        "studio 8 map.tmx",
+        "Office_walls_floors_32x32.tsx",
+        "Modern_Office_32x32.tsx",
+        "Room_Builder_Office_32x32.tsx",
+        "Room_Builder_Office1_32x32.tsx",
+        "Office_Floors_TILESET_A2_.tsx",
+        "Interiors_32x32.tsx"
+    ],
+    "project": "untitled.tiled-project",
+    "recentFiles": [
+        "studio 8 map.tmx",
+        "Office_walls_floors_32x32.tsx",
+        "Modern_Office_32x32.tsx",
+        "Room_Builder_Office_32x32.tsx",
+        "Room_Builder_Office1_32x32.tsx",
+        "Interiors_32x32.tsx",
+        "Office_Floors_TILESET_A2_.tsx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.lastUsedFormat": "tsx"
+}
