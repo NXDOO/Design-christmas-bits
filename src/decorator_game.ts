@@ -201,7 +201,7 @@ export class DecoratorGame {
         
         // Image Icon
         const img = document.createElement('img');
-        img.src = item.imgSrc;
+        img.src = base + item.imgSrc.substring(1);
         // img.style.width = '32px'; // Removed fixed width
         img.style.height = 'auto'; 
         img.style.imageRendering = 'pixelated';
@@ -244,7 +244,7 @@ export class DecoratorGame {
       const item = this.items.find(i => i.id === id);
       if (item) {
           // Update cursor image
-          this.cursorImg.src = item.imgSrc;
+          this.cursorImg.src = import.meta.env.BASE_URL + item.imgSrc.substring(1);
           this.cursorImg.style.display = 'block';
           // Initial Position (will update on mousemove)
       }
