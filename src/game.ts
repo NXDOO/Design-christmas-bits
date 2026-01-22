@@ -196,25 +196,27 @@ export class Game {
 
   sleep(ms: number) { return new Promise(res => setTimeout(res, ms)); }
 
-  async moveNPCToPlayer(npc: { x: number; y: number; type: string; dir?: number; lastMoveTime?: number }, ignoreCollision = false, ignoreWalls = false) {
-    // Move NPC step-by-step until adjacent to player (Manhattan distance 1)
-    const maxSteps = 200;
+  async moveNPCTo(npc: { x: number; y: number; type: string; dir?: number; lastMoveTime?: number }, target: { x: number; y: number }, ignoreCollision = false, ignoreWalls = false) {
+    // Move NPC step-by-step until adjacent to target
+    const isPlayer = target === this.player;
+    const minDist = isPlayer ? 1 : 0;
+
+    const maxSteps = 300;
     let steps = 0;
-    while (Math.abs(npc.x - this.player.x) + Math.abs(npc.y - this.player.y) > 1 && steps < maxSteps) {
-      const dx = this.player.x > npc.x ? 1 : (this.player.x < npc.x ? -1 : 0);
-      const dy = this.player.y > npc.y ? 1 : (this.player.y < npc.y ? -1 : 0);
+    
+    let preferredAxis = 'y'; 
+    let axisFailCount = 0;
+
+    while (Math.abs(npc.x - target.x) + Math.abs(npc.y - target.y) > minDist && steps < maxSteps) {
+      const dx = target.x > npc.x ? 1 : (target.x < npc.x ? -1 : 0);
+      const dy = target.y > npc.y ? 1 : (target.y < npc.y ? -1 : 0);
       
       let moved = false;
       
-      // Helper to try move
       const tryMove = (tx: number, ty: number, dir: number) => {
-          // Check Walkable
           if (!ignoreWalls && !this.isWalkable(tx, ty)) return false;
-          
-          // Check NPC Collision (unless ignored)
           if (!ignoreCollision && this.isOccupiedByNPC(tx, ty)) return false;
-          
-          // Always check Player Collision (don't walk on top of player)
+          // Don't step on player
           if (tx === this.player.x && ty === this.player.y) return false;
 
           npc.x = tx;
@@ -224,38 +226,63 @@ export class Game {
           return true;
       };
 
-      // 1. Try Vertical Move (Preferred, swapped based on user request)
-      if (dy !== 0) {
-          if (tryMove(npc.x, npc.y + dy, dy > 0 ? 3 : 1)) moved = true;
+      // Determine attempt order based on preference
+      const attempts = [];
+      const primary = preferredAxis === 'y' 
+        ? { axis: 'y', val: dy, tx: npc.x, ty: npc.y + dy, dir: dy > 0 ? 3 : 1 }
+        : { axis: 'x', val: dx, tx: npc.x + dx, ty: npc.y, dir: dx > 0 ? 0 : 2 };
+      
+      const secondary = preferredAxis === 'y'
+        ? { axis: 'x', val: dx, tx: npc.x + dx, ty: npc.y, dir: dx > 0 ? 0 : 2 }
+        : { axis: 'y', val: dy, tx: npc.x, ty: npc.y + dy, dir: dy > 0 ? 3 : 1 };
+
+      const order = [primary, secondary];
+
+      for (const att of order) {
+        if (!moved && att.val !== 0) {
+            if (tryMove(att.tx, att.ty, att.dir)) {
+                moved = true;
+                // If managed to move in preferred axis, success reset?
+                if (att.axis === preferredAxis) axisFailCount = 0;
+            } else {
+                // Failed to move in desired direction
+                if (att.axis === preferredAxis) axisFailCount++;
+            }
+        }
       }
 
-      // 2. Try Horizontal Move (If V failed or dx is preferred/needed)
-      if (!moved && dx !== 0) {
-          if (tryMove(npc.x + dx, npc.y, dx > 0 ? 0 : 2)) moved = true;
+      // Logic to switch preference if blocked repeatedly
+      if (axisFailCount >= 2) {
+          preferredAxis = preferredAxis === 'y' ? 'x' : 'y';
+          axisFailCount = 0;
       }
-      
-      // 3. Anti-Stuck / Sliding Logic
+
+      // 3. Anti-Stuck / Sliding Logic (Sidestep)
       if (!moved) {
-          // If wanted to move Y but blocked: Try moving X (Left or Right)
-          if (dy !== 0) {
-               // Try Right
+          if (dy !== 0 && dx === 0) {
+               // Vertical wanted, Horizontal 0. Try sidestep X.
                if (tryMove(npc.x + 1, npc.y, 0)) moved = true;
-               // If not, Try Left
                else if (tryMove(npc.x - 1, npc.y, 2)) moved = true;
           }
-          // If wanted to move X but blocked: Try moving Y (Up or Down)
-          else if (dx !== 0) {
-              // Try Down
+          else if (dx !== 0 && dy === 0) {
+              // Horizontal wanted, Vertical 0. Try sidestep Y.
               if (tryMove(npc.x, npc.y + 1, 3)) moved = true;
-              // If not, Try Up
               else if (tryMove(npc.x, npc.y - 1, 1)) moved = true;
           } 
+          else if (dx !== 0 && dy !== 0) {
+              // Diagonal wanted. Both blocked. 
+              // Try random sidestep? (Not common if previous logic works)
+          }
       }
 
       this.render();
       await this.sleep(140);
       steps++;
     }
+  }
+
+  async moveNPCToPlayer(npc: { x: number; y: number; type: string; dir?: number; lastMoveTime?: number }, ignoreCollision = false, ignoreWalls = false) {
+      return this.moveNPCTo(npc, this.player, ignoreCollision, ignoreWalls);
   }
 
   waitForDialogClose(): Promise<void> {
@@ -281,13 +308,33 @@ export class Game {
       // Check if player is around Samuel (38, 16) within 2 tiles distance
       if (Math.abs(this.player.x - 38) <= 2 && Math.abs(this.player.y - 16) <= 2) {
            console.log("Special End Game Sequence: Spawning Alice to the right.");
-           // Force spawn at (48, 17) - shifted down 1 to avoid overlap/stuck issues
+           // Force spawn at (48, 17)
            aa.x = 48; 
            aa.y = 17;
            aa.visualX = 48;
            aa.visualY = 17;
-           ignoreWalls = false; // Walk normally as requested
-           ignoreNPCs = false; // Respect NPC collisions (Don't walk through Samuel)
+           
+           // Dogleg Movement: Match Y first, then X.
+           // Samuel is at (38, 16). Player is nearby (e.g. 37, 16).
+           // If Alice starts at (48, 17), we want her to walk Left along Y=17 until she passes Samuel, then go Up.
+           
+           // Step 1: Walk to (Player.x, 17). This ensures vertical alignment below the obstacle line.
+           await this.moveNPCTo(aa, { x: this.player.x, y: 17 }, false, false);
+           
+           // Step 2: Now walk to Player (Short vertical distance)
+           await this.moveNPCTo(aa, this.player, false, false);
+
+           // Force Directions: 
+           // Player faces Front (frames 19-24 -> dir 3)
+           // Alice faces Back (frames 7-12 -> dir 1)
+           this.player.dir = 3;
+           aa.dir = 1;
+
+           this.render(); // Ensure visual update logic sees the dir change if needed, though loop handles it
+           
+           this.showDialog('Everyone is waiting at the party room. Hurry up, we are taking a photo soon!', { name: 'Alice' });
+           await this.waitForDialogClose();
+           // allow fall-through to Party Map loading
       } else {
         // Teleport if too far
         const dist = Math.abs(aa.x - this.player.x) + Math.abs(aa.y - this.player.y);
@@ -332,12 +379,12 @@ export class Game {
                if (spawned) break;
             }
         }
-      }
 
-      // Force ignore collision with other NPCs and Walls(only generically)
-      await this.moveNPCToPlayer(aa, ignoreNPCs, ignoreWalls);
-      this.showDialog('Everyone is waiting at the party room. Hurry up, we are taking a photo soon!', { name: 'Alice' });
-      await this.waitForDialogClose();
+        // Force ignore collision with other NPCs and Walls(only generically)
+        await this.moveNPCToPlayer(aa, ignoreNPCs, ignoreWalls);
+        this.showDialog('Everyone is waiting at the party room. Hurry up, we are taking a photo soon!', { name: 'Alice' });
+        await this.waitForDialogClose();
+      }
     }
 
     // Load Party Map
