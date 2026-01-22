@@ -231,8 +231,8 @@ export class MiniGame {
         // Load assets from public/ (served at root /)
         // Adjust paths if needed based on build setup. Assuming standard Vite/Webpack public folder behavior.
         const [imgSample, imgCheck] = await Promise.all([
-            this.loadImage(`/Sample${n}.png`),
-            this.loadImage(`/Check${n}.png`)
+            this.loadImage(import.meta.env.BASE_URL + `Sample${n}.png`),
+            this.loadImage(import.meta.env.BASE_URL + `Check${n}.png`)
         ]);
 
         // Resize canvases to match image natural size to preserve PROPORTION

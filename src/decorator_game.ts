@@ -27,11 +27,13 @@ export class DecoratorGame {
   constructor() {
     // Preload images
     this.bgImage = new Image();
-    this.bgImage.src = '/party.png?v=' + Date.now();
+    const base = import.meta.env.BASE_URL;
+    this.bgImage.src = base + 'party.png?v=' + Date.now();
     
     this.items.forEach(item => {
         const img = new Image();
-        img.src = item.imgSrc + '?v=' + Date.now();
+        // Assume item.imgSrc has a leading slash
+        img.src = base + item.imgSrc.substring(1) + '?v=' + Date.now();
         this.images[item.id] = img;
     });
 

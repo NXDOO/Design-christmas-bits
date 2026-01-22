@@ -159,7 +159,7 @@ export class BartenderGame {
       wrapper.style.cursor = 'pointer';
       
       const img = document.createElement('img');
-      img.src = '/' + ing.file;
+      img.src = import.meta.env.BASE_URL + ing.file;
       img.style.width = '48px';
       img.style.height = '48px';
       img.style.objectFit = 'contain'; // Ensure pixel art scales nicely or stays contained
@@ -240,7 +240,7 @@ export class BartenderGame {
                 if (c < count) {
                      // Filled Slot
                     const img = document.createElement('img');
-                    img.src = '/' + (drinkIcons[r.name] || 'Coffee.png');
+                    img.src = import.meta.env.BASE_URL + (drinkIcons[r.name] || 'Coffee.png');
                     img.style.width = '32px'; 
                     img.style.height = '32px';
                     img.style.objectFit = 'contain';

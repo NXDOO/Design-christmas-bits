@@ -74,28 +74,29 @@ export class Party {
     const container = this.overlay.querySelector('#gift-boxes-container') as HTMLDivElement;
     if (container) {
         container.innerHTML = '';
+        const base = import.meta.env.BASE_URL;
         
         const giftData = [
             { 
                 id: 1, 
                 hint: "Looks like a cute teddy bear, soft and adorable!", 
                 result: "It's a scented candle. Smells really good!",
-                boxImg: "/fake_gift_1.png?v=2",
-                realImg: "/real_gift_1.png?v=2"
+                boxImg: `${base}fake_gift_1.png?v=2`,
+                realImg: `${base}real_gift_1.png?v=2`
             },
             { 
                 id: 2, 
                 hint: "What is this? A Lego head storage box? Looks familiar... I think I've seen it before.", 
                 result: "It's a tub of protein powder! Health is most important!",
-                boxImg: "/fake_gift_2.png?v=2",
-                realImg: "/real_gift_2.png?v=2" 
+                boxImg: `${base}fake_gift_2.png?v=2`,
+                realImg: `${base}real_gift_2.png?v=2` 
             },
             { 
                 id: 3, 
                 hint: "Is this the world-famous Labubu? Could it be a secret edition?!", 
                 result: "Not Labubu, but a bottle of red wine! Cheers!",
-                boxImg: "/fake_gift_3.png?v=2",
-                realImg: "/real_gift_3.png?v=2" 
+                boxImg: `${base}fake_gift_3.png?v=2`,
+                realImg: `${base}real_gift_3.png?v=2` 
             }
         ];
 
