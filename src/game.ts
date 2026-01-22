@@ -281,11 +281,11 @@ export class Game {
       // Check if player is around Samuel (38, 16) within 2 tiles distance
       if (Math.abs(this.player.x - 38) <= 2 && Math.abs(this.player.y - 16) <= 2) {
            console.log("Special End Game Sequence: Spawning Alice to the right.");
-           // Force spawn at (48, 16) - 9 tiles away to right
+           // Force spawn at (48, 17) - shifted down 1 to avoid overlap/stuck issues
            aa.x = 48; 
-           aa.y = 16;
+           aa.y = 17;
            aa.visualX = 48;
-           aa.visualY = 16;
+           aa.visualY = 17;
            ignoreWalls = false; // Walk normally as requested
            ignoreNPCs = false; // Respect NPC collisions (Don't walk through Samuel)
       } else {
