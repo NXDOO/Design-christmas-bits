@@ -54,7 +54,7 @@ export async function loadTiledMap(url: string): Promise<{ map: SimpleMap }> {
       const img = new Image();
       // Simplify path: Assume all images are in the root public folder
       const filename = imagePath.split('/').pop()?.split('\\').pop();
-      const cleanPath = '/' + filename;
+      const cleanPath = import.meta.env.BASE_URL + filename;
       
       const v = Date.now();
       img.src = `${cleanPath}?v=${v}`; 

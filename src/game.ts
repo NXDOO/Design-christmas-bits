@@ -80,17 +80,18 @@ export class Game {
     // Load Hero Images
     this.heroStandImage = new Image();
     const v = Date.now();
-    this.heroStandImage.src = `/hero_stand.png?v=${v}`;
+    const base = import.meta.env.BASE_URL;
+    this.heroStandImage.src = `${base}hero_stand.png?v=${v}`;
     this.heroRunImage = new Image();
-    this.heroRunImage.src = `/hero_run.png?v=${v}`;
+    this.heroRunImage.src = `${base}hero_run.png?v=${v}`;
 
     // Load UI Images
     this.questMarkImage = new Image();
-    this.questMarkImage.src = `/quest_mark.png?v=${v}`;
+    this.questMarkImage.src = `${base}quest_mark.png?v=${v}`;
 
     // Load BGM
     // Add timestamp to prevent caching old version
-    this.bgm = new Audio('/bgm.mp3?v=' + Date.now());
+    this.bgm = new Audio(`${base}bgm.mp3?v=` + Date.now());
     this.bgm.loop = true;
     this.bgm.volume = 0.2;
     this.bgm.muted = false; // Default unmuted
@@ -107,8 +108,8 @@ export class Game {
         stand: new Image(),
         run: new Image()
       };
-      const v = Date.now();
-      this.npcImages[type].stand.src = `/${type}_stand.png?v=${v}`;
+      const v = Date.now();${base}${type}_stand.png?v=${v}`;
+      this.npcImages[type].run.src = `${base}`/${type}_stand.png?v=${v}`;
       this.npcImages[type].run.src = `/${type}_run.png?v=${v}`;
     });
 
@@ -117,8 +118,8 @@ export class Game {
         stand: new Image(),
         gift: new Image()
     };
-    const v5 = Date.now();
-    this.npc5Images.stand.src = `/Santa_stand.png?v=${v5}`;
+    const v5 = Date.now();${base}Santa_stand.png?v=${v5}`;
+    this.npc5Images.gift.src = `${base}/Santa_stand.png?v=${v5}`;
     this.npc5Images.gift.src = `/Santa_gift.png?v=${v5}`;
     
     ctx.imageSmoothingEnabled = false;
@@ -324,7 +325,7 @@ export class Game {
 
     // Load Party Map
     try {
-        const { map: partyMap } = await loadTiledMap('/party_map.json');
+        const { map: partyMap } = await loadTiledMap(import.meta.env.BASE_URL + 'party_map.json');
         this.isInPartyMap = true;
         this.map = partyMap;
         this.cameraPos = null; // Reset camera

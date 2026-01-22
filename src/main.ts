@@ -62,7 +62,7 @@ async function init() {
   // 1. Export it as JSON (e.g. 'map.json') and put it in 'public/'
   // 2. Put tileset images in 'public/'
   // 3. Uncomment the line below:
-  const { map } = await loadTiledMap('/map.json'); 
+  const { map } = await loadTiledMap(import.meta.env.BASE_URL + 'map.json'); 
   console.log('Map loaded', map);
   loading.remove();
   
