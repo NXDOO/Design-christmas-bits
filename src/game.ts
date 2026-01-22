@@ -108,9 +108,9 @@ export class Game {
         stand: new Image(),
         run: new Image()
       };
-      const v = Date.now();${base}${type}_stand.png?v=${v}`;
-      this.npcImages[type].run.src = `${base}`/${type}_stand.png?v=${v}`;
-      this.npcImages[type].run.src = `/${type}_run.png?v=${v}`;
+      const v = Date.now();
+      this.npcImages[type].stand.src = `${base}${type}_stand.png?v=${v}`;
+      this.npcImages[type].run.src = `${base}${type}_run.png?v=${v}`;
     });
 
     // Load NPC5 (Santa)
@@ -118,9 +118,9 @@ export class Game {
         stand: new Image(),
         gift: new Image()
     };
-    const v5 = Date.now();${base}Santa_stand.png?v=${v5}`;
-    this.npc5Images.gift.src = `${base}/Santa_stand.png?v=${v5}`;
-    this.npc5Images.gift.src = `/Santa_gift.png?v=${v5}`;
+    const v5 = Date.now();
+    this.npc5Images.stand.src = `${base}Santa_stand.png?v=${v5}`;
+    this.npc5Images.gift.src = `${base}Santa_gift.png?v=${v5}`;
     
     ctx.imageSmoothingEnabled = false;
 
