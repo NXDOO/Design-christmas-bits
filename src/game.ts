@@ -273,52 +273,66 @@ export class Game {
     // Find AA and move them to the player, then show dialog and switch to party map
     const aa = this.npcs.find(n => n.type === 'aa');
     if (aa) {
-      // Teleport if too far
-      const dist = Math.abs(aa.x - this.player.x) + Math.abs(aa.y - this.player.y);
-      // Threshold 18 (screen width approx 10-15 tiles depending on zoom). 
-      // User requested "10 blocks" (10 grids) proximity. 
-      // If > 12 tiles away, we teleport closer (to ~8-10 tiles away).
-      if (dist > 12) {
-          const w = Math.ceil(this.canvas.width / this.tileSize);
-          const h = Math.ceil(this.canvas.height / this.tileSize);
-          // Try to spawn at edge of screen or slightly offscreen (e.g. 10 tiles away)
-          // Camera logic puts player at center. Screen radius is w/2, h/2.
-          // Let's pick a spot approx 8-10 tiles away from player in a cardinal direction
-          // But ensure it is walkable and reachable
-          
-          let spawned = false;
-          // Search in a spiral or circle around player at radius 8-10
-          for (let r = 8; r <= 10; r++) { 
-             const dirs = [
-                 { x: 0, y: r }, { x: 0, y: -r }, { x: r, y: 0 }, { x: -r, y: 0 },
-                 { x: r, y: r }, { x: -r, y: -r }, { x: r, y: -r }, { x: -r, y: r }
-             ];
-             for (const d of dirs) {
-                 const cx = this.player.x + d.x;
-                 const cy = this.player.y + d.y;
-                 if (cx >= 0 && cx < this.map.width && cy >= 0 && cy < this.map.height) {
-                     // Ensure valid floor to prevent spawning in void/outside walls
-                     const idx = cy * this.map.width + cx;
-                     const f1 = this.map.layers?.find(l => l.name === 'floor')?.data?.[idx] || 0;
-                     const f2 = this.map.layers?.find(l => l.name === 'floor2')?.data?.[idx] || 0;
-                     const hasFloor = (f1 !== 0) || (f2 !== 0);
-                     
-                    if (hasFloor && this.isWalkable(cx, cy) && !this.isOccupiedByNPC(cx, cy)) {
-                        aa.x = cx;
-                        aa.y = cy;
-                        aa.visualX = cx;
-                        aa.visualY = cy;
-                        spawned = true;
-                        break;
-                    }
-                 }
-             }
-             if (spawned) break;
-          }
+      // Special Handling for specific End Game Pos (39, 16)
+      // Alice spawns to the right and walks left
+      let ignoreWalls = true;
+
+      if (this.player.x === 39 && this.player.y === 16) {
+           console.log("Special End Game Sequence: Spawning Alice to the right.");
+           // Force spawn at (48, 16) - 9 tiles away to right
+           aa.x = 48; 
+           aa.y = 16;
+           aa.visualX = 48;
+           aa.visualY = 16;
+           ignoreWalls = false; // Walk normally as requested
+      } else {
+        // Teleport if too far
+        const dist = Math.abs(aa.x - this.player.x) + Math.abs(aa.y - this.player.y);
+        // Threshold 18 (screen width approx 10-15 tiles depending on zoom). 
+        // User requested "10 blocks" (10 grids) proximity. 
+        // If > 12 tiles away, we teleport closer (to ~8-10 tiles away).
+        if (dist > 12) {
+            const w = Math.ceil(this.canvas.width / this.tileSize);
+            const h = Math.ceil(this.canvas.height / this.tileSize);
+            // Try to spawn at edge of screen or slightly offscreen (e.g. 10 tiles away)
+            // Camera logic puts player at center. Screen radius is w/2, h/2.
+            // Let's pick a spot approx 8-10 tiles away from player in a cardinal direction
+            // But ensure it is walkable and reachable
+            
+            let spawned = false;
+            // Search in a spiral or circle around player at radius 8-10
+            for (let r = 8; r <= 10; r++) { 
+               const dirs = [
+                   { x: 0, y: r }, { x: 0, y: -r }, { x: r, y: 0 }, { x: -r, y: 0 },
+                   { x: r, y: r }, { x: -r, y: -r }, { x: r, y: -r }, { x: -r, y: r }
+               ];
+               for (const d of dirs) {
+                   const cx = this.player.x + d.x;
+                   const cy = this.player.y + d.y;
+                   if (cx >= 0 && cx < this.map.width && cy >= 0 && cy < this.map.height) {
+                       // Ensure valid floor to prevent spawning in void/outside walls
+                       const idx = cy * this.map.width + cx;
+                       const f1 = this.map.layers?.find(l => l.name === 'floor')?.data?.[idx] || 0;
+                       const f2 = this.map.layers?.find(l => l.name === 'floor2')?.data?.[idx] || 0;
+                       const hasFloor = (f1 !== 0) || (f2 !== 0);
+                       
+                      if (hasFloor && this.isWalkable(cx, cy) && !this.isOccupiedByNPC(cx, cy)) {
+                          aa.x = cx;
+                          aa.y = cy;
+                          aa.visualX = cx;
+                          aa.visualY = cy;
+                          spawned = true;
+                          break;
+                      }
+                   }
+               }
+               if (spawned) break;
+            }
+        }
       }
 
-      // Force ignore collision with other NPCs and Walls to prevent getting stuck
-      await this.moveNPCToPlayer(aa, true, true);
+      // Force ignore collision with other NPCs and Walls(only generically)
+      await this.moveNPCToPlayer(aa, true, ignoreWalls);
       this.showDialog('Everyone is waiting at the party room. Hurry up, we are taking a photo soon!', { name: 'Alice' });
       await this.waitForDialogClose();
     }
