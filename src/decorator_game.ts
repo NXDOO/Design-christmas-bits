@@ -23,6 +23,10 @@ export class DecoratorGame {
   
   _resolve: ((val: boolean) => void) | null = null;
   paletteEls: Record<string, HTMLDivElement> = {}; // Track palette elements to update UI
+  
+  // Track mouse globally for initial positioning
+  lastMouseX = 0;
+  lastMouseY = 0;
 
   constructor() {
     // Preload images
@@ -49,6 +53,9 @@ export class DecoratorGame {
 
     // Global Mouse Tracking for cursor item
     document.addEventListener('mousemove', (e) => {
+        this.lastMouseX = e.clientX;
+        this.lastMouseY = e.clientY;
+
         if (this.selectedId && !this.overlay.classList.contains('hidden')) {
             // Center the image on the cursor
             const w = this.cursorImg.width || 32;
@@ -246,7 +253,13 @@ export class DecoratorGame {
           // Update cursor image
           this.cursorImg.src = import.meta.env.BASE_URL + item.imgSrc.substring(1);
           this.cursorImg.style.display = 'block';
-          // Initial Position (will update on mousemove)
+          
+          // Initial Position (immediately set to last known mouse position)
+          // Use item logical size for better centering prediction
+          const w = (item.w * this.tileSize) || 32; 
+          const h = (item.h * this.tileSize) || 32;
+          this.cursorImg.style.left = (this.lastMouseX - w/2) + 'px';
+          this.cursorImg.style.top = (this.lastMouseY - h/2) + 'px';
       }
       this.updatePaletteUI();
   }
