@@ -276,6 +276,7 @@ export class Game {
       // Special Handling for specific End Game Pos (Around Samuel at 38, 16)
       // Alice spawns to the right and walks left
       let ignoreWalls = true;
+      let ignoreNPCs = true;
 
       // Check if player is around Samuel (38, 16) within 2 tiles distance
       if (Math.abs(this.player.x - 38) <= 2 && Math.abs(this.player.y - 16) <= 2) {
@@ -286,6 +287,7 @@ export class Game {
            aa.visualX = 48;
            aa.visualY = 16;
            ignoreWalls = false; // Walk normally as requested
+           ignoreNPCs = false; // Respect NPC collisions (Don't walk through Samuel)
       } else {
         // Teleport if too far
         const dist = Math.abs(aa.x - this.player.x) + Math.abs(aa.y - this.player.y);
@@ -333,7 +335,7 @@ export class Game {
       }
 
       // Force ignore collision with other NPCs and Walls(only generically)
-      await this.moveNPCToPlayer(aa, true, ignoreWalls);
+      await this.moveNPCToPlayer(aa, ignoreNPCs, ignoreWalls);
       this.showDialog('Everyone is waiting at the party room. Hurry up, we are taking a photo soon!', { name: 'Alice' });
       await this.waitForDialogClose();
     }
