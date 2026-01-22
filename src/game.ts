@@ -273,11 +273,12 @@ export class Game {
     // Find AA and move them to the player, then show dialog and switch to party map
     const aa = this.npcs.find(n => n.type === 'aa');
     if (aa) {
-      // Special Handling for specific End Game Pos (39, 16)
+      // Special Handling for specific End Game Pos (Around Samuel at 38, 16)
       // Alice spawns to the right and walks left
       let ignoreWalls = true;
 
-      if (this.player.x === 39 && this.player.y === 16) {
+      // Check if player is around Samuel (38, 16) within 2 tiles distance
+      if (Math.abs(this.player.x - 38) <= 2 && Math.abs(this.player.y - 16) <= 2) {
            console.log("Special End Game Sequence: Spawning Alice to the right.");
            // Force spawn at (48, 16) - 9 tiles away to right
            aa.x = 48; 
