@@ -196,7 +196,7 @@ export class Game {
 
   sleep(ms: number) { return new Promise(res => setTimeout(res, ms)); }
 
-  async moveNPCToPlayer(npc: { x: number; y: number; type: string; dir?: number; lastMoveTime?: number }, ignoreCollision = false) {
+  async moveNPCToPlayer(npc: { x: number; y: number; type: string; dir?: number; lastMoveTime?: number }, ignoreCollision = false, ignoreWalls = false) {
     // Move NPC step-by-step until adjacent to player (Manhattan distance 1)
     const maxSteps = 200;
     let steps = 0;
@@ -209,7 +209,7 @@ export class Game {
       // Helper to try move
       const tryMove = (tx: number, ty: number, dir: number) => {
           // Check Walkable
-          if (!this.isWalkable(tx, ty)) return false;
+          if (!ignoreWalls && !this.isWalkable(tx, ty)) return false;
           
           // Check NPC Collision (unless ignored)
           if (!ignoreCollision && this.isOccupiedByNPC(tx, ty)) return false;
@@ -317,8 +317,8 @@ export class Game {
           }
       }
 
-      // Force ignore collision with other NPCs to prevent getting stuck
-      await this.moveNPCToPlayer(aa, true);
+      // Force ignore collision with other NPCs and Walls to prevent getting stuck
+      await this.moveNPCToPlayer(aa, true, true);
       this.showDialog('Everyone is waiting at the party room. Hurry up, we are taking a photo soon!', { name: 'Alice' });
       await this.waitForDialogClose();
     }
